@@ -25,13 +25,10 @@ def new_patient():
 
 @app.route("/api/average_bmi/<input_age>", methods=['GET'])
 def bmi_averaging(input_age):
-    bmi_total = 0
-    counter = 0
+    average_bmi = []
     for user in User.objects.raw({"age": int(input_age)}):
 
-        bmi_total = bmi_total + user.bmi
-        counter = counter + 1
-
-    average_bmi = bmi_total / counter
-
-    return jsonify(average_bmi)
+        average_bmi.append(user.bmi)
+    final_result = list(map(int, average_bmi))
+    
+    return jsonify(sum(final_result)/len(final_result))
